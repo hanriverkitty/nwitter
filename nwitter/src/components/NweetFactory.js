@@ -1,6 +1,11 @@
-import React from "react";
+import { dbService, storageservice } from "fbase";
+import { v4 as uuidv4 } from "uuid";
+import React, { useEffect, useState } from "react";
 
-const NweetFactory = () => {
+const NweetFactory = ({ userObj }) => {
+    const [nweet, setNweet] = useState("");
+    const [fileString, setFileString] = useState("");
+
     const onChange = (event) => {
         const { target: { value }, } = event;
         setNweet(value);
