@@ -4,11 +4,11 @@ import Auth from "../routes/Auth";
 import Home from "../routes/Home";
 import Navigation from "./Navigation";
 import Profile from "routes/Profile";
-const AppRouter = ({ isLoggedIn, userObj }) => {
+const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
     return (
         <Router>
             {/* &&는 Navigation이 존재하려면 isLoggedIn이 참이여야한다 */}
-            {isLoggedIn && <Navigation />}
+            {isLoggedIn && <Navigation userObj={userObj} />}
             <Switch>
                 {isLoggedIn ? (
                     //<>는 부모요소가 없을때 많은 요소들을 render하고싶을때 사용
@@ -17,7 +17,7 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                             <Home userObj={userObj} />
                         </Route>
                         <Route exact path="/profile">
-                            <Profile />
+                            <Profile userObj={userObj} refreshUser={refreshUser} />
                         </Route>
                         {/* <Redirect from="*" to="/" /> */}
                     </>) : (

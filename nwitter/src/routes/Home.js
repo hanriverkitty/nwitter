@@ -1,11 +1,11 @@
 import Nweet from "components/Nweet";
 import { dbService, storageservice } from "fbase";
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid/v4";
+import { v4 as uuidv4 } from "uuid";
 const Home = ({ userObj }) => {
     const [nweet, setNweet] = useState("");
     const [nweets, setNweets] = useState([]);
-    const [fileString, setFileString] = useState();
+    const [fileString, setFileString] = useState("");
     // const getNweets = async () => {
     //     const dbNweets = await dbService.collection("nweets").get();
     //     dbNweets.forEach((document) => {
@@ -26,7 +26,21 @@ const Home = ({ userObj }) => {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        storageservice.ref().child(`${userObj.uid}/`)
+        let fileUrl = "";
+        if (fileString !== "") {
+            const fileRef = storageservice.ref().child(`${userObj.uid}/${uuidv4()}`);
+            const response = await fileRef.putString(fileString, "data_url");
+            fileUrl = await response.ref.getDownloadURL();
+        }
+        const nweetObj1 = {
+            text: nweet,
+            createdAt: Date.now(),
+            creatorId: userObj.uid,
+            fileUrl,
+        };
+        await dbService.collection("nweets").add(nweetObj1);
+        setNweet("");
+        setFileString("");
         /* await dbService.collection("nweets").add({
              text: nweet,
              createdAt: Date.now(),
@@ -52,15 +66,6 @@ const Home = ({ userObj }) => {
     const onClearFile = () => setFileString(null);
     return (
         <div>
-            <form onSubmit={onSubmit}>
-                <input value={nweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />
-                <input type="file" accept="image/*" onChange={onFileChange} />
-                <input type="submit" value="Nweet" />
-                {fileString && (<div>
-                    <img src={fileString} width="50px" height="50px" />
-                    <button onClick={onClearFile}>Clear</button>
-                </div>)}
-            </form>
             <div>
                 {nweets.map((nweet) => (
                     <Nweet key={nweet.id} nweetObj={nweet} isOwner={nweet.creatorId === userObj.uid} />
