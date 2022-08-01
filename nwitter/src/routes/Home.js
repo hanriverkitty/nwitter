@@ -3,7 +3,7 @@ import NweetFactory from "components/NweetFactory";
 import { dbService, storageservice } from "fbase";
 import React, { useEffect, useState } from "react";
 const Home = ({ userObj }) => {
-    
+
     const [nweets, setNweets] = useState([]);
     // const getNweets = async () => {
     //     const dbNweets = await dbService.collection("nweets").get();
@@ -26,9 +26,9 @@ const Home = ({ userObj }) => {
 
 
     return (
-        <div>
+        <div className="container">
             <NweetFactory userObj={userObj} />
-            <div>
+            <div style={{ marginTop: 30 }}>
                 {nweets.map((nweet) => (
                     <Nweet key={nweet.id} nweetObj={nweet} isOwner={nweet.creatorId === userObj.uid} />
                 ))}

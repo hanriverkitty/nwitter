@@ -12,7 +12,16 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
             <Switch>
                 {isLoggedIn ? (
                     //<>는 부모요소가 없을때 많은 요소들을 render하고싶을때 사용
-                    <>
+                    <div
+                        style={{
+                            maxWidth: 890,
+                            width: "100%",
+                            margin: "0 auto",
+                            marginTop: 80,
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
                         <Route exact path="/">
                             <Home userObj={userObj} />
                         </Route>
@@ -20,7 +29,7 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
                             <Profile userObj={userObj} refreshUser={refreshUser} />
                         </Route>
                         {/* <Redirect from="*" to="/" /> */}
-                    </>) : (
+                    </div>) : (
                     <>
                         <Route exact path="/">
                             <Auth />
